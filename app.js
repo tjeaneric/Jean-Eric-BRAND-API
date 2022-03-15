@@ -14,6 +14,9 @@ const app = express();
 const articleRouter = require('./routes/articleRoutes');
 const userRouter = require('./routes/userRoutes');
 
+const commentRouter = require('./routes/commentRoutes');
+const messageRouter = require('./routes/messageRoutes');
+
 //1)GLOBAL MIDDLEWARES
 
 //Set security HTTP headers
@@ -56,6 +59,8 @@ app.use(hpp());
 
 app.use('/api/v1/articles', articleRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/comments', commentRouter);
+app.use('/api/v1/messages', messageRouter);
 
 app.all('*', (req, res, next) => {
   next(

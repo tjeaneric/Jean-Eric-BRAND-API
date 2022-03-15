@@ -1,16 +1,21 @@
 const express = require('express');
 
-const router = express.Router();
 const articleController = require('../controllers/articleController');
 const authController = require('../controllers/authController');
+const commentRouter = require('./commentRoutes');
+
+const router = express.Router();
+
+router.use('/:articleId/comments', commentRouter);
 
 router
   .route('/')
-  .get(authController.protect, articleController.getAllArticles)
+  .get(articleController.getAllArticles)
   .post(authController.protect, articleController.createArticle);
+
 router
   .route('/:id')
-  .get(articleController.getOneArticle)
+  .get(articleController.getArticle)
   .patch(authController.protect, articleController.updateArticle)
   .delete(
     authController.protect,
