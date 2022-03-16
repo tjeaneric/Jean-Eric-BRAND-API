@@ -7,10 +7,18 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
-dotenv.config({ path: './config.env' });
+dotenv.config();
 const app = require('./app');
 
-const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD);
+let DB;
+
+if (process.env.NODE_ENV === 'development') {
+  DB = process.env.DB_DEV;
+} else if (process.env.NODE_ENV === 'test') {
+  DB = process.env.DB_TEST;
+} else if (process.env.NODE_ENV === 'production') {
+  DB = process.env.DB_PROD;
+} else DB = process.env.DB_DEV;
 
 mongoose
   .connect(DB, {
@@ -21,8 +29,8 @@ mongoose
   })
   .then(() => console.log('DB connected successfully!'));
 
-const port = 8080;
-app.listen(port, () => {
+const port = process.env.PORT;
+const server = app.listen(port, () => {
   console.log(`app running on port ${port}........`);
 });
 
@@ -31,3 +39,5 @@ process.on('unhandledRejection', (err) => {
   console.log(err.name, err.message);
   process.exit(1);
 });
+
+module.exports = server;

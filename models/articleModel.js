@@ -3,6 +3,11 @@ const mongoose = require('mongoose');
 
 const articleSchema = new mongoose.Schema(
   {
+    photo: {
+      type: String,
+      default: 'default.jpg',
+      // required: [true, 'An article must have a photo'],
+    },
     title: {
       type: String,
       required: [true, 'An Article must have a title '],

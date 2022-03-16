@@ -4,14 +4,40 @@
   "description": "This project is about making the api for my portfolio website.",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "start:prod": "NODE_ENV=production nodemon server.js",
-    "debug": "ndb server.js"
+    "debug": "ndb server.js",
+    "dev": "better-npm-run dev",
+    "test": "better-npm-run test"
+  },
+  "betterScripts": {
+    "prod":{
+      "command": "node server.js",
+      "env":{
+        "NODE_ENV": "production"
+      }
+    },
+
+    "dev": {
+      "command": "nodemon server.js",
+      "env": {
+        "NODE_ENV": "development",
+        "PORT": 8080
+      }
+    },
+    "test": {
+      "command": "PORT=8000 nyc --reporter=html --reporter=text mocha  ./tests/* --timeout 1000000 --exit || true",
+      "env": {
+        "NODE_ENV": "test",
+        "PORT": 5000
+      }
+    }
   },
   "author": "Jean Eric TUYISHIMIRE",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "better-npm-run": "^0.1.1",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "express-mongo-sanitize": "^2.2.0",
@@ -21,11 +47,15 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.5.2",
     "morgan": "^1.10.0",
+    "multer": "^1.4.1",
     "nodemailer": "^6.7.2",
     "validator": "^13.7.0",
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
+    "coveralls": "^3.1.1",
     "eslint": "^8.10.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
@@ -34,7 +64,10 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.3",
-    "prettier": "^2.5.1"
+    "mocha": "^9.2.2",
+    "nyc": "^15.1.0",
+    "prettier": "^2.5.1",
+    "sinon": "^13.0.1"
   },
   "engines": {
     "node": ">=10.0.0"

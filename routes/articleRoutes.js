@@ -11,7 +11,11 @@ router.use('/:articleId/comments', commentRouter);
 router
   .route('/')
   .get(articleController.getAllArticles)
-  .post(authController.protect, articleController.createArticle);
+  .post(
+    authController.protect,
+    articleController.uploadArticlePhoto,
+    articleController.createArticle
+  );
 
 router
   .route('/:id')
