@@ -56,7 +56,11 @@ app.use(xss());
 app.use(hpp());
 
 //3)ROUTES
-
+app.get('/', (req, res) => {
+  res.status(200).json({
+    message: 'Welcome to my API',
+  });
+});
 app.use('/api/v1/articles', articleRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/comments', commentRouter);
