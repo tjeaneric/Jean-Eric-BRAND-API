@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'development') {
 } else DB = process.env.DB_DEV;
 
 mongoose
-  .connect(DB, {
+  .connect(DB + '', {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
