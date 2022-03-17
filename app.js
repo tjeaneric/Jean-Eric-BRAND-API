@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cors = require('cors');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -18,6 +19,9 @@ const commentRouter = require('./routes/commentRoutes');
 const messageRouter = require('./routes/messageRoutes');
 
 //1)GLOBAL MIDDLEWARES
+
+//CORS ENABLED FOR ALL ORIGINS
+app.use(cors());
 
 //Set security HTTP headers
 app.use(helmet());
