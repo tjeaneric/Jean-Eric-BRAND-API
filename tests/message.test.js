@@ -42,7 +42,7 @@ describe('Testing Message endpoints', () => {
       .post('api/v1/messages')
       .send(message)
       .end((err, res) => {
-        chai.expect(res.statusCode).to.equal(404);
+        chai.expect(res.status).to.equal(404);
       });
     done();
   });

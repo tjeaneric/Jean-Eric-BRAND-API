@@ -17,14 +17,4 @@ describe('Testing article endpoints', () => {
       });
     done();
   });
-
-  it('test get one article', (done) => {
-    chai
-      .request(server)
-      .get('/api/v1/articles/622d969bd428fe7fa87168a8')
-      .end((err, res) => {
-        chai.expect(res.statusCode).to.equal(200);
-      });
-    done();
-  });
 });

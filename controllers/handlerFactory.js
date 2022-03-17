@@ -1,6 +1,7 @@
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const APIFeatures = require('../utils/apiFeatures');
+const articleController = require('./articleController');
 
 exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
@@ -80,8 +81,8 @@ exports.updateOne = (Model) =>
 
 exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    console.log(req.file);
-    console.log(req.body);
+    if (req.file) req.body.photo = await articleController.uploadFile(req);
+
     const doc = await Model.create(req.body);
 
     res.status(201).json({

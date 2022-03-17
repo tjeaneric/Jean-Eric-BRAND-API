@@ -11,6 +11,7 @@ dotenv.config();
 const app = require('./app');
 
 let DB;
+console.log(process.env.NODE_ENV);
 
 if (process.env.NODE_ENV === 'development') {
   DB = process.env.DB_DEV;

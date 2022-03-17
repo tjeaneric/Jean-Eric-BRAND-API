@@ -1,10 +1,17 @@
 const express = require('express');
+const multer = require('multer');
 
 const articleController = require('../controllers/articleController');
 const authController = require('../controllers/authController');
 const commentRouter = require('./commentRoutes');
 
 const router = express.Router();
+
+const storageFile = multer.diskStorage({});
+const upload = multer({
+  storage: storageFile,
+  file: articleController.fileFilter,
+});
 
 router.use('/:articleId/comments', commentRouter);
 
@@ -13,7 +20,7 @@ router
   .get(articleController.getAllArticles)
   .post(
     authController.protect,
-    articleController.uploadArticlePhoto,
+    upload.single('photo'),
     articleController.createArticle
   );
 

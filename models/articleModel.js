@@ -5,8 +5,8 @@ const articleSchema = new mongoose.Schema(
   {
     photo: {
       type: String,
-      default: 'default.jpg',
       // required: [true, 'An article must have a photo'],
+      default: 'default.jpg',
     },
     title: {
       type: String,
