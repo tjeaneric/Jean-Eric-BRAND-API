@@ -6,6 +6,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -41,6 +42,7 @@ app.use('/api', limiter);
 
 //Body parser, reading data from body into req.body
 app.use(express.json());
+app.use(cookieParser());
 
 //Data sanitization against Nosql query injection
 /*
@@ -59,6 +61,11 @@ app.use(xss());
 //Prevent parameter pollution
 app.use(hpp());
 
+//Test middleware
+app.use((req, res, next) => {
+  console.log(req.cookies);
+  next();
+});
 //3)ROUTES
 app.get('/', (req, res) => {
   res.status(200).json({
