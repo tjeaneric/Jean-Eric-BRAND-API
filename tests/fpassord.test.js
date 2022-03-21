@@ -52,4 +52,21 @@ describe('FORGOT PASSWORD ROUTES', () => {
         done();
       });
   });
+
+  it('RESET PASSWORD FAIL INVALID TOKEN', (done) => {
+    chai
+      .request(server)
+      .post(
+        '/api/v1/users/resetPassword/41067c2f99247979427097805753f3ec2d449ec65b9617fc1464e3cd021f5ecd'
+      )
+      .send({
+        password: 'mybrandapi',
+        passwordConfirm: 'mybrandapi',
+      })
+      .end((error, response) => {
+        chai.expect(response.statusCode).to.equal(401);
+        // chai.expect(response.body).to.have.property('token');
+        done();
+      });
+  });
 });

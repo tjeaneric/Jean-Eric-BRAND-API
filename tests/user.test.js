@@ -39,6 +39,78 @@ describe('Testing User Auth', () => {
       });
   });
 
+  it('USER getMe route', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/users/me')
+      .set('Authorization', `Bearer ${process.env.TEST_TOKEN}`)
+      .end((error, response) => {
+        chai.expect(response.statusCode).to.equal(200);
+        done();
+      });
+  });
+
+  it('USER updateMe route FAIL', (done) => {
+    chai
+      .request(server)
+      .patch('/api/v1/users/updateMe')
+      .set('Authorization', `Bearer ${process.env.TEST_BAD_TOKEN}`)
+      .field({
+        name: 'victor',
+        password: 'thisbrandisfake',
+      })
+      .end((error, response) => {
+        chai.expect(response.statusCode).to.equal(401);
+        done();
+      });
+  });
+
+  it('USER updateMe route FAIL because of password field', (done) => {
+    chai
+      .request(server)
+      .patch('/api/v1/users/updateMe')
+      .set('Authorization', `Bearer ${process.env.TEST_TOKEN}`)
+      .field({
+        name: 'victor',
+        password: 'thisbrandisfake',
+        passwordConfirm: 'thisbrandisfake',
+      })
+      .end((error, response) => {
+        chai.expect(response.statusCode).to.equal(200);
+        done();
+      });
+  });
+
+  it('USER updateMe route SUCCESS', (done) => {
+    chai
+      .request(server)
+      .patch('/api/v1/users/updateMe')
+      .set('Authorization', `Bearer ${process.env.TEST_TOKEN_ADMIN}`)
+      .field({
+        name: 'victor',
+      })
+      .end((error, response) => {
+        chai.expect(response.statusCode).to.equal(200);
+        done();
+      });
+  });
+
+  // it('USER UPDATE PASSWORD SUCCESS', (done) => {
+  //   chai
+  //     .request(server)
+  //     .patch('/api/v1/users/updateMyPassword')
+  //     .set('Authorization', `Bearer ${process.env.TEST_TOKEN_ADMIN}`)
+  //     .field({
+  //       passwordCurrent: 'mybrandapi',
+  //       password: 'mybrandapi',
+  //       passwordConfirm: 'mybrandapi',
+  //     })
+  //     .end((error, response) => {
+  //       chai.expect(response.statusCode).to.equal(200);
+  //       done();
+  //     });
+  // });
+
   it('GET ALL USERS SUCCESS', (done) => {
     chai
       .request(server)
