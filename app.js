@@ -7,6 +7,8 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./jsDoc.json');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -79,6 +81,17 @@ app.use('/api/v1/articles', articleRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/comments', commentRouter);
 app.use('/api/v1/messages', messageRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.use('/api/v1/', articleRouter, commentRouter, messageRouter, userRouter);
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, { explorer: true })
+);
+app.use('*', (req, res, next) => {
+  res.status(404).json({ error: 'NOT FOUND' });
+});
 
 app.all('*', (req, res, next) => {
   next(

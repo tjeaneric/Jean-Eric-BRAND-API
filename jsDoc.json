@@ -1,0 +1,909 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Jean-Eric-Brand-API",
+    "description": "API Documentations using Swagger",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Jean Eric TUYISHIMIRE",
+      "email": "ericjon415@gmail.comcom",
+      "url": "Jean Eric"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "name": "DEV"
+    }
+  ],
+
+  "paths": {
+    "/api/v1/users/signup": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Registration for user | Admin",
+        "description": "Registrations for user's either admin or standard-user",
+        "operationId": "Signup",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Resource payload",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "passwordConfirm": {
+                  "type": "string"
+                }
+              },
+              "required": ["name", "email", "password", "passwordConfirm"]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/v1/users/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Login for user | Admin",
+        "description": "Login for user's either admin or standard-user",
+        "operationId": "login",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Resource payload",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "required": ["email", "password"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User Logged in"
+          }
+        }
+      }
+    },
+    "/api/v1/users/forgotPassword": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Forgot Password feature for user | Admin",
+        "description": "Forgot Password featurefor user's either admin or standard-user",
+        "operationId": "Forgot Password ",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Resource payload",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                }
+              },
+              "required": ["email"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "token sent to email"
+          },
+          "404": {
+            "description": "There is no user with that email address"
+          }
+        }
+      }
+    },
+    "/api/v1/users/updateMyPassword": {
+      "patch": {
+        "tags": ["Authentication"],
+        "summary": "Update Password feature for user | Admin",
+        "description": "Update Password feature for either admin or standard-user",
+        "operationId": "Update Password ",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Resource payload",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "passwordCurrent": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "passwordConfirm": {
+                  "type": "string"
+                }
+              },
+              "required": ["email"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "401": {
+            "description": "Your current password is wrong!"
+          }
+        }
+      }
+    },
+    "/api/v1/users/me": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Get current User",
+        "description": "Get current User for either admin or standard-user",
+        "operationId": "Get current User ",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "401": {
+            "description": "You are not logged in!. Please log in to get access"
+          }
+        }
+      }
+    },
+    "/api/v1/users/updateMe": {
+      "patch": {
+        "tags": ["Authentication"],
+        "summary": "Update current User ",
+        "description": "Update current User",
+        "operationId": "Update current User ",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Resource payload",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "400": {
+            "description": "This address is not for password update. Please use /updateMyPassword"
+          }
+        }
+      }
+    },
+    "/api/v1/users/resetPassword/{token}": {
+      "patch": {
+        "tags": ["Authentication"],
+        "summary": "resetPassword for user | Admin",
+        "description": "resetPasswordfor user's either admin or standard-user",
+        "operationId": "resetPassword",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "description": "token",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Resource payload",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "type": "string"
+                },
+                "passwordConfirm": {
+                  "type": "string"
+                }
+              },
+              "required": ["password", "passwordConfirm"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "reset success"
+          },
+          "400": {
+            "description": "Token is invalid or has expired!"
+          }
+        }
+      }
+    },
+    "/api/v1/users": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get all users",
+        "description": "Get all users, Restricted only to Admin",
+        "operationId": "Get all users",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create a user",
+        "description": "Create a user, Restricted only to Admin",
+        "operationId": "Create a user",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Resource payload",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "passwordConfirm": {
+                  "type": "string"
+                }
+              },
+              "required": ["name", "email", "password", "passwordConfirm"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          }
+        }
+      }
+    },
+    "/api/v1/users{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get one user",
+        "description": "Get one user, Restricted only to Admin",
+        "operationId": "Get one user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User Id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "404": {
+            "description": "No document found with that ID"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Update a user",
+        "description": "Update a user, Restricted only to Admin",
+        "operationId": "Update a user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User Id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Resource payload",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "404": {
+            "description": "No document found with that ID"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete a user",
+        "description": "Delete a user, Restricted only to Admin",
+        "operationId": "Delete a user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User Id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "404": {
+            "description": "No document found with that ID"
+          }
+        }
+      }
+    },
+    "/api/v1/articles": {
+      "get": {
+        "tags": ["Articles"],
+        "summary": "Get all articles",
+        "description": "Get all articles for all users",
+        "operationId": "Get all articles",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "success"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Articles"],
+        "summary": "Create article",
+        "description": "Create article, Needs to be Authenticated",
+        "operationId": "Create article",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Resource payload",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "photo": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "author": {
+                  "type": "string"
+                },
+                "preview": {
+                  "type": "string"
+                },
+                "body": {
+                  "type": "string"
+                }
+              },
+              "required": ["photo", "title", "author", "preview", "body"]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "created"
+          }
+        }
+      }
+    },
+    "/api/v1/articles/{id}": {
+      "get": {
+        "tags": ["Articles"],
+        "summary": "Get one article",
+        "description": "Get one article for All users, No token required",
+        "operationId": "Get one article",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Artticle Id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "404": {
+            "description": "No document found with that ID"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Articles"],
+        "summary": "Update article",
+        "description": "Update article for All users, No token required",
+        "operationId": "Update article",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Artticle Id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Resource payload",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "preview": {
+                  "type": "string"
+                }
+              },
+              "required": []
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "404": {
+            "description": "No document found with that ID"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Articles"],
+        "summary": "Delete article",
+        "description": "Delete article for All users, No token required",
+        "operationId": "Delete article",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Artticle Id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "404": {
+            "description": "No document found with that ID"
+          }
+        }
+      }
+    },
+
+    "/api/v1/messages": {
+      "get": {
+        "tags": ["Messages"],
+        "summary": "Get all message",
+        "description": "Get all message, Restricted to Admin only",
+        "operationId": "Get all message",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Messages"],
+        "summary": "Create message",
+        "description": "Create message, No token required",
+        "operationId": "Create message",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Resource payload",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+
+                "subject": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": ["name", "email", "subject", "message"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          }
+        }
+      }
+    },
+    "/api/v1/messages/{id}": {
+      "get": {
+        "tags": ["Messages"],
+        "summary": "Get one message",
+        "description": "Get one message, Restricted to Admin only",
+        "operationId": "Get one message",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Message Id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "404": {
+            "description": "No document found with that ID"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Messages"],
+        "summary": "Delete message",
+        "description": "Delete message, restricted to Admin only",
+        "operationId": "Delete message",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Message Id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          }
+        }
+      }
+    },
+    "/api/v1/comments": {
+      "get": {
+        "tags": ["Comments"],
+        "summary": "Get all comments",
+        "description": "Get all comments, No token required",
+        "operationId": "Get all comments",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "success"
+          }
+        }
+      }
+    },
+    "/api/v1/articles/{article_id}/comments": {
+      "post": {
+        "tags": ["Comments"],
+        "summary": "Create comment",
+        "description": "Create comment on article, No token required",
+        "operationId": "Create comment on article",
+        "parameters": [
+          {
+            "name": "article_id",
+            "in": "path",
+            "description": "Article Id",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Resource payload",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "author": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+
+                "comment": {
+                  "type": "string"
+                }
+              },
+              "required": ["author", "email", "comment"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Comments"],
+        "summary": "Get all comments",
+        "description": "Get  comments on aricle, No token required",
+        "operationId": "Get  comments on aricle",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "success"
+          }
+        }
+      }
+    },
+    "/api/v1/articles/comments/{id}": {
+      "delete": {
+        "tags": ["Comments"],
+        "summary": "Delete a comments",
+        "description": "Delete a comments on aricle, Restricted to Admin only",
+        "operationId": "Delete a comments on aricle",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Comment Id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success"
+          },
+          "404": {
+            "description": "No document found with that ID"
+          }
+        }
+      }
+    }
+  },
+
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "passwordConfirm": {
+          "type": "string"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Comment": {
+      "type": "object",
+      "properties": {
+        "author": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "Article": {
+      "type": "object",
+      "properties": {
+        "photo": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "preview": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
