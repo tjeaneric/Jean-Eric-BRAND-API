@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
+dotenv.config({ path: './env' });
 process.on('uncaughtException', (err) => {
   console.log('UNCAUGHT EXCEPTION!, shutting down.....');
   console.log(err);
   process.exit(1);
 });
 
-dotenv.config({ path: './env' });
 const app = require('./app');
 
 let DB;
@@ -17,6 +17,14 @@ if (process.env.NODE_ENV === 'development') {
   DB = process.env.DB_DEV;
 } else if (process.env.NODE_ENV === 'test') {
   DB = process.env.DB_TEST;
+  // mongoose
+  //   .connect(DB, {
+  //     useNewUrlParser: true,
+  //     useCreateIndex: true,
+  //     useFindAndModify: false,
+  //     useUnifiedTopology: true,
+  //   })
+  //   .then(() => console.log('DB connected successfully!'));
 } else if (process.env.NODE_ENV === 'production') {
   DB = process.env.DB_PROD;
 } else DB = process.env.DB_DEV;
@@ -24,9 +32,9 @@ if (process.env.NODE_ENV === 'development') {
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
-    //useCreateIndex: true,
-    //useFindAndModify: false,
-    // useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
   })
   .then(() => console.log('DB connected successfully!'));
 
