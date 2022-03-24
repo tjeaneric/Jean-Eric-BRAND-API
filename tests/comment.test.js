@@ -34,7 +34,22 @@ describe('Testing comment endpoints', () => {
       .request(server)
       .get('/api/v1/articles/622d969bd428fe7fa8716a8/comments')
       .end((err, res) => {
-        chai.expect(res.statusCode).to.equal(500);
+        chai.expect(res.statusCode).to.equal(400);
+      });
+    done();
+  });
+
+  it('test create comment', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/articles/62330b68aef8fd1dccc73b78/comments')
+      .send({
+        author: 'Aime',
+        email: 'aime@mail.com',
+        comment: 'see Aime is lifting weight',
+      })
+      .end((err, res) => {
+        chai.expect(res.statusCode).to.equal(400);
       });
     done();
   });

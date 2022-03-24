@@ -9,6 +9,23 @@ chai.use(chaiHttp);
 
 // eslint-disable-next-line no-undef
 describe('Testing User Auth', () => {
+  it('USER SIGNUP Fail duplicate fields', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/users/signup')
+      .send({
+        name: 'Karenzi',
+        email: 'karenzi@mail.com',
+        password: 'mybrandapi',
+        passwordConfirm: 'mybrandapi',
+      })
+      .end((error, response) => {
+        chai.expect(response.statusCode).to.equal(400);
+        //chai.expect(response.body).to.have.property('token');
+        done();
+      });
+  });
+
   it('USER LOGIN SUCCESS', (done) => {
     chai
       .request(server)
@@ -131,58 +148,6 @@ describe('Testing User Auth', () => {
       .end((error, response) => {
         chai.expect(response.statusCode).to.equal(403);
         // chai.expect(response.body).to.have.property('_id');
-        done();
-      });
-  });
-});
-
-describe('ARTICLE', () => {
-  it('ARTICLE CREATE SUCCESS', (done) => {
-    chai
-      .request(server)
-      .post('/api/v1/articles')
-      .set('Authorization', `Bearer ${process.env.TEST_TOKEN}`)
-      .field({
-        title: 'Aimes Article',
-        author: 'Aimee',
-        preview: 'see Aime',
-        body: 'Police Adhan confusion',
-      })
-      .end((error, response) => {
-        chai.expect(response.statusCode).to.equal(201);
-        // chai.expect(response.body).to.have.property('_id');
-        done();
-      });
-  });
-});
-
-describe('USERS', () => {
-  it('GET ALL USERS FAIL', (done) => {
-    chai
-      .request(server)
-      .get('/api/v1/articles/62330d48fc857f2373537269')
-      .end((error, response) => {
-        chai.expect(response.statusCode).to.equal(200);
-        // chai.expect(response.body).to.have.property('_id');
-        if (error) {
-          console.log();
-        }
-        done();
-      });
-  });
-});
-
-describe('ARTCILE', () => {
-  it('GET ARTICLE FAIL', (done) => {
-    chai
-      .request(server)
-      .get('/api/v1/articles/62330d48fc857f2373537268')
-      .end((error, response) => {
-        chai.expect(response.statusCode).to.equal(404);
-        // chai.expect(response.body).to.have.property('_id');
-        if (error) {
-          console.log();
-        }
         done();
       });
   });

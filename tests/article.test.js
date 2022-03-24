@@ -7,8 +7,8 @@ const server = require('../server');
 
 chai.use(chaiHttp);
 
-describe('Testing article endpoints', () => {
-  it('test get all articles', (done) => {
+describe('ARTICLE', () => {
+  it('GET ALL ARTICLES', (done) => {
     chai
       .request(server)
       .get('/api/v1/articles')
@@ -18,17 +18,16 @@ describe('Testing article endpoints', () => {
     done();
   });
 
-  it('USER LOGIN SUCCESS', (done) => {
+  it('GET ARTICLE FAIL', (done) => {
     chai
       .request(server)
-      .post('/api/v1/users/login')
-      .send({
-        email: 'admin@mail.com',
-        password: 'mybrandapi',
-      })
+      .get('/api/v1/articles/62330d48fc857f2373537268')
       .end((error, response) => {
-        chai.expect(response.statusCode).to.equal(200);
-        // chai.expect(response.body).to.have.property('token');
+        chai.expect(response.statusCode).to.equal(404);
+        // chai.expect(response.body).to.have.property('_id');
+        if (error) {
+          console.log(error);
+        }
         done();
       });
   });
@@ -42,6 +41,24 @@ describe('Testing article endpoints', () => {
         chai.expect(res.statusCode).to.equal(404);
       });
     done();
+  });
+
+  it('ARTICLE CREATE SUCCESS', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/articles')
+      .set('Authorization', `Bearer ${process.env.TEST_TOKEN}`)
+      .field({
+        title: 'Aimes Article',
+        author: 'Aimee',
+        preview: 'see Aime',
+        body: 'Police Adhan confusion',
+      })
+      .end((error, response) => {
+        chai.expect(response.statusCode).to.equal(201);
+        // chai.expect(response.body).to.have.property('_id');
+        done();
+      });
   });
 
   it('test update article fail', (done) => {

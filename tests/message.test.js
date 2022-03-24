@@ -29,20 +29,38 @@ describe('Testing Message endpoints', () => {
     done();
   });
 
-  it('test post one message', (done) => {
+  it('test post one message fail duplicate field error', (done) => {
     const message = {
       name: 'Theo',
-      email: 'theo@mail.com',
+      email: 'theo1@mail.com',
       subject: 'Website',
       message: 'Please can you teach to develop Website',
     };
 
     chai
       .request(server)
-      .post('api/v1/messages')
+      .post('/api/v1/messages')
       .send(message)
       .end((err, res) => {
-        chai.expect(res.status).to.equal(404);
+        chai.expect(res.status).to.equal(400);
+      });
+    done();
+  });
+
+  it('test post one message fail Validation error', (done) => {
+    const message = {
+      name: 'Theo',
+      email: 'theo2@mail.com',
+      subject: 'Website',
+      message: 'P',
+    };
+
+    chai
+      .request(server)
+      .post('/api/v1/messages')
+      .send(message)
+      .end((err, res) => {
+        chai.expect(res.status).to.equal(400);
       });
     done();
   });
